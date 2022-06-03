@@ -1,4 +1,5 @@
 import { AudioClip, JsonAsset, Prefab, resources, sp, SpriteFrame, TiledMapAsset } from "cc";
+import { CLog } from "../utils/CLog";
 /**
  * 资源管理类
  * load加载
@@ -21,12 +22,12 @@ export class ResMgr{
      * @param cb
      * @returns
      */
-    loadPerfab(path: string, cb: (prefab: Prefab) => void) {
-        if (this.perfabMaps.has(path))return cb(this.perfabMaps.get(path));
+    loadPerfab(path: string, cb?: (prefab: Prefab) => void) {
+        if (this.perfabMaps.has(path))return cb?.(this.perfabMaps.get(path));
         resources.load(path, Prefab,(err: Error, prefab: Prefab)=> {
-            if (err) return cb(null);
+            if (err) return cb?.(null);
             this.perfabMaps.set(path, prefab);
-            cb(prefab);
+            cb?.(prefab);
         });
     }
 
@@ -37,10 +38,13 @@ export class ResMgr{
      * @param cb
      * @return
      */
-    loadAudio(name: string, cb?: (audioClip: AudioClip) => void): void {
+    loadAudio(name: string, cb?: (audioClip: AudioClip) => void,debug?:boolean): void {
         if (this.audioMaps.has(name)) return cb && cb(this.audioMaps.get(name));
         resources.load(name, AudioClip, (err, audio)=> {
-            if (err) return cb && cb(null);
+            if (err){
+                if(debug) CLog.logList([`未找到音频:${name}`,err])
+                return cb && cb(null);
+            } 
             this.audioMaps.set(name, audio);
             cb && cb(audio);
         })

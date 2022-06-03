@@ -7,5 +7,5 @@ export enum PoolType{
 }
 
 export enum AudioType{
-    
+    start="audio/music/雨声"
 }
