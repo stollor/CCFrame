@@ -11,7 +11,9 @@ class BaseEvent{
         this.callback=callback;
     }
 }
-
+/**
+ * 全局事件管理
+ */
 export class EventMgr  {
     private _eventList: {}={};
 
