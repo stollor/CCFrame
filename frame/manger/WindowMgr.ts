@@ -1,4 +1,4 @@
-import { find ,Node} from "cc";
+import { find ,Layers,Node, Widget} from "cc";
 import { PageLeve, PageType } from "../EnumMgr";
 
 export class WindowMgr{
@@ -7,12 +7,24 @@ export class WindowMgr{
         this.init();
     }
 
+    getPageNode(name){
+        let newNode:Node=new Node(name);
+        newNode.layer=Layers.Enum.UI_2D;
+        let widget=newNode.addComponent(Widget);
+        widget.alignFlags=1 << 0| 1 << 1|1 << 2|1 << 3| 1 << 4|1 << 5;
+        widget.left=0;
+        widget.right=0;
+        widget.top=0;
+        widget.bottom=0;
+        return newNode;
+    }
+
     init(){
       let pages:Node=find("Canvas/pages");
       if(!pages) return;
       for(let leve in PageLeve){
           let temp=find(leve,pages);
-          if(!temp) pages.addChild(temp);
+          if(!temp) pages.addChild(this.getPageNode(leve));
       }
       let index=0;
       for(let leve in PageLeve){

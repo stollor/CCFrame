@@ -1,7 +1,9 @@
+import { Game } from "cc";
 import { AudioMgr } from "./manger/AudioMgr";
 import { EventMgr } from "./manger/EventMgr";
 import { PoolMgr } from "./manger/PoolMgr";
 import { ResMgr } from "./manger/ResMgr";
+import { WindowMgr } from "./manger/WindowMgr";
 
 
 /**
@@ -21,6 +23,8 @@ export class GameManager {
     private  _audioMgr:AudioMgr;
     /**事件管理 */
     private  _eventMgr:EventMgr;
+    /**页面管理 */
+    private _windowMgr:WindowMgr;
 
     get resMgr(){
         if(!this._resMgr) this._resMgr=new ResMgr();
@@ -43,6 +47,11 @@ export class GameManager {
         return this._eventMgr;
     }
 
+    get windowMgr(){
+        if(!this._windowMgr) this._windowMgr=new WindowMgr();
+        return this._windowMgr;
+    }
+
 
     private static _getInstance:GameManager;
     public static getInstance(){
@@ -55,7 +64,7 @@ export class GameManager {
         globalThis.eventMgr=GameManager.getInstance().eventMgr;
         globalThis.poolMgr=GameManager.getInstance().poolMgr;
         globalThis.audioMgr=GameManager.getInstance().audioMgr;
-        
+        globalThis.windowMgr=GameManager.getInstance().windowMgr;
     }
 }
 
@@ -65,5 +74,6 @@ declare global {
         var eventMgr:EventMgr;
         var poolMgr:PoolMgr;
         var audioMgr:AudioMgr;
+        var windowMgr:WindowMgr;
     }
 }
