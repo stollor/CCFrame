@@ -26,7 +26,7 @@ export class PoolMgr  {
      * @param type 
      * @returns 
      */
-    public getNew(type:PoolType):Node{
+    public getNew(type:PoolType|string):Node{
         let node=instantiate(globalThis.resMgr.perfabMaps.get(type)); 
         node["path"]=type;
         return node;
@@ -37,7 +37,7 @@ export class PoolMgr  {
      * @param type 节点类型
      * @returns 
      */
-    public get(type:PoolType):Node{
+    public get(type:PoolType|string):Node{
         if(!this._pool.has(type)){
             this._pool.set(type,[]);
             return this.getNew(type);

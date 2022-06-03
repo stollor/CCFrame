@@ -9,14 +9,13 @@ export class CNodeCustom extends Button {
 
 }
 
-
-
 declare module 'cc' {
     interface Node {
         on: (type, callback, target, useCapture?, video?) => void;
         setStr:(str:string|number)=>void;
         setImg:(frame:SpriteFrame)=>void;
         setImgRes:(path:string)=>void;
+        onClick:(cb:Function,inter?:number)=>void;
     }
 }
 
@@ -50,6 +49,18 @@ Node.prototype.setImgRes=function(path:string){
     globalThis.resMgr.loadImage(path,(frame)=>{
         this.setImg(frame);
     })
+}
+
+Node.prototype.onClick=function(cb:Function,inter:number=-1){
+    let btn=this.getComponent(Button);
+    if(!btn) btn=this.addComponent(Button);
+    this.on(Button.EventType.CLICK,()=>{
+        if(inter>0) {
+            btn.interactable=false;
+            btn.scheduleOnce(()=>{btn.interactable=true;},inter);
+        }
+        cb&&cb();
+    },this);
 }
 
 
