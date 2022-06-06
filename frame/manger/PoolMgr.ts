@@ -59,6 +59,12 @@ export class PoolMgr  {
     public put(node:Node){
         let path=node["path"];
         if(path){
+            node.active=false;
+            node.parent=null;
+            for(let i=0;i<node.components.length;i++ ){
+                //@ts-ignore
+                node.components[i].unuse &&node.components[i].unuse();
+            }
             let list:Node[]=this._pool.get(path);
             if(!list){
                 this._pool.set(path,[node]);
