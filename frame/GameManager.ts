@@ -1,6 +1,7 @@
 import { Game } from "cc";
 import { AudioMgr } from "./manger/AudioMgr";
 import { EventMgr } from "./manger/EventMgr";
+import { LocalDataMgr } from "./manger/LocalDataMgr";
 import { PoolMgr } from "./manger/PoolMgr";
 import { ResMgr } from "./manger/ResMgr";
 import { WindowMgr } from "./manger/WindowMgr";
@@ -25,6 +26,8 @@ export class GameManager {
     private  _eventMgr:EventMgr;
     /**页面管理 */
     private _windowMgr:WindowMgr;
+    /**本地数据管理 */
+    private _localDataMgr:LocalDataMgr;
 
     get resMgr(){
         if(!this._resMgr) this._resMgr=new ResMgr();
@@ -52,6 +55,10 @@ export class GameManager {
         return this._windowMgr;
     }
 
+    get localDataMgr(){
+        if(!this._localDataMgr) this._localDataMgr=new LocalDataMgr();
+        return this._localDataMgr;
+    }
 
     private static _getInstance:GameManager;
     public static getInstance(){
@@ -65,15 +72,23 @@ export class GameManager {
         globalThis.poolMgr=GameManager.getInstance().poolMgr;
         globalThis.audioMgr=GameManager.getInstance().audioMgr;
         globalThis.windowMgr=GameManager.getInstance().windowMgr;
+        globalThis.localDataMgr=GameManager.getInstance().localDataMgr;
     }
 }
 
 declare global {
     namespace globalThis {
+        /**资源管理 */
         var resMgr:ResMgr;
+        /**全局事件 */
         var eventMgr:EventMgr;
+        /**节点池 */
         var poolMgr:PoolMgr;
+        /**声音管理 */
         var audioMgr:AudioMgr;
+        /**页面管理 */
         var windowMgr:WindowMgr;
+        /**本地数据管理 */
+        var localDataMgr:LocalDataMgr;
     }
 }
