@@ -1,21 +1,28 @@
 
-import { Sprite, SpriteFrame } from 'cc';
+import { Component, Sprite, SpriteFrame } from 'cc';
 import { Button, Label, RichText } from 'cc';
 import { _decorator, Node} from 'cc';
+import { EventType } from '../EnumMgr';
 const { ccclass, property } = _decorator;
 
 @ccclass('CNodeCustom')
-export class CNodeCustom extends Button {
+export class CNodeCustom extends Component {
 
 }
 
 declare module 'cc' {
     interface Node {
+        /**扩展的方法 */
         on: (type, callback, target, useCapture?, video?) => void;
+        destory:()=>boolean;
+
+        /**增加的方法 */
         setStr:(str:string|number)=>void;
         setImg:(frame:SpriteFrame)=>void;
         setImgRes:(path:string)=>void;
         onClick:(cb:Function,inter?:number)=>void;
+        onEvent:(type:EventType,event:Function)=>void;
+        onEventMap:(Map:Map<EventType,Array<Function>>)=>void;
     }
 }
 
@@ -33,6 +40,15 @@ Node.prototype.on = function (type, callback, target, useCapture, video) {
     }
     NodeOn.call(this, type, cb, target, useCapture);
 }
+
+var NodeDestory:Function=Node.prototype.destroy;
+Node.prototype.destroy=function(){
+    globalThis?.eventMgr?.offTarget(this);
+    return NodeDestory.call(this);
+}
+
+
+
 
 Node.prototype.setStr=function(str:string|number){
     let comp=this.getComponent(Label);
@@ -61,6 +77,18 @@ Node.prototype.onClick=function(cb:Function,inter:number=-1){
         }
         cb&&cb();
     },this);
+}
+
+Node.prototype.onEvent=function(type:EventType,event:Function){
+    globalThis?.eventMgr?.on(type,event,this)
+}
+
+Node.prototype.onEventMap=function(map:Map<EventType,Array<Function>>){
+    for(let key in map){
+        for(let i=0;i< map[key].length;i++){
+            globalThis?.eventMgr?.on(key,map[key][i],this)
+        }
+    }
 }
 
 
