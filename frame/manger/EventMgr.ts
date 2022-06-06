@@ -1,4 +1,5 @@
 import { js } from "cc";
+import { EventType } from "../EnumMgr";
 
 const fastRemoveAt = js.array.fastRemoveAt;
 
@@ -16,8 +17,30 @@ class BaseEvent{
  */
 export class EventMgr  {
     private _eventList: {}={};
+    private _eventMap:{}={};
 
-    //constructor(){ this._eventList={}}
+    public getKey(list:any[],start,end){
+        let key="";
+        let maxLen=Math.min(end,list.length);
+        for(let i=start;i<=maxLen;i++){
+            key+=list[i];
+            if(i<maxLen-1){
+                key+="_";
+            }
+        }
+        return key;
+    }
+
+    constructor(){ 
+        for(let i in EventType){
+            let temp=i.split("_");
+            for(let j=0;j<temp.length-1;j++){
+                let key=this.getKey(temp,0,j);
+                if(!this._eventMap[key]) this._eventMap[key]=[];
+                this._eventMap[key].push(temp[j+1]);
+            }
+        }
+    }
 
     /**监听事件
      * @param type 事件类型
@@ -53,14 +76,21 @@ export class EventMgr  {
     /**抛消息
      * @param type 
      * @param data 
+     * @param loop 是相应下级事件
      */
-    public emit(type:string, data:any) {
+    public emit(type:string, data:any,loop=false) {
         let list=this._eventList[type];
         if(list){
             let len=list.length;
             for(let i=0;i<len;i++){
                 list[i].callback.call( list[i].target,type,data);
             }
+        }
+        if(!loop) return;
+        let next=this._eventMap[type];
+        if(!next ||next.length<1) return;
+        for(let i=0;i<next.length;i++){
+            this.emit(type+"_"+next[i],data);
         }
     }
 
