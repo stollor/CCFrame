@@ -1,4 +1,5 @@
 import { Game } from "cc";
+import { EventType } from "./EnumMgr";
 import { AudioMgr } from "./manger/AudioMgr";
 import { EventMgr } from "./manger/EventMgr";
 import { LocalDataMgr } from "./manger/LocalDataMgr";
@@ -8,7 +9,7 @@ import { WindowMgr } from "./manger/WindowMgr";
 
 
 /**
- * name:游戏框架管理类
+ * name:游戏框架管理�?
  * info:
  * author:s906094945
  * time:(Mon May 30 2022 22:33:40 GMT+0800 (中国标准时间))
@@ -73,6 +74,12 @@ export class GameManager {
         globalThis.audioMgr=GameManager.getInstance().audioMgr;
         globalThis.windowMgr=GameManager.getInstance().windowMgr;
         globalThis.localDataMgr=GameManager.getInstance().localDataMgr;
+
+        let callBack=()=>{
+            globalThis.eventMgr.emit(EventType.Game_Start,null);
+        }
+
+        globalThis.poolMgr.init(callBack);
     }
 }
 
@@ -82,7 +89,7 @@ declare global {
         var resMgr:ResMgr;
         /**全局事件 */
         var eventMgr:EventMgr;
-        /**节点池 */
+        /**节点�? */
         var poolMgr:PoolMgr;
         /**声音管理 */
         var audioMgr:AudioMgr;
