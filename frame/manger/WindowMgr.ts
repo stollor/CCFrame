@@ -1,5 +1,6 @@
-import { find ,Layers,Node, Widget} from "cc";
-import { PageLeve, PageType } from "../EnumMgr";
+import { find ,Layers,Node, tween, Widget} from "cc";
+import { PageAniType, PageLeve, PageType } from "../EnumMgr";
+import { CTween } from "../utils/CTween";
 
 export class WindowMgr{
 
@@ -33,11 +34,12 @@ export class WindowMgr{
       }
     }
 
-    open(type:PageType,leve:PageLeve,data=null){
-        let page=globalThis.poolMgr.get(type);
+    open(type:PageType,leve:PageLeve,data=null,ani:PageAniType=PageAniType.fadeIn){
+        let page:Node=globalThis.poolMgr.get(type);
         let parent:Node=find("Canvas/pages/"+leve);
         parent.addChild(page);
-        if(!data) return;
+        CTween.runPageAni(page,ani);
+        if(!data|| !page.components) return;
         for(let i=0;i<page.components.length;i++){
             //@ts-ignore
             page.components[i].init?.(data);
@@ -45,8 +47,11 @@ export class WindowMgr{
 
     }
 
-    close(node){
-        globalThis.poolMgr.put(node);
+    close(page:Node,ani:PageAniType=PageAniType.fadeOut){
+        CTween.runPageAni(page,ani,()=>{
+            globalThis.poolMgr.put(page);
+        });
+        
     }
 
     activeLevels(leves:PageLeve[],active:boolean){

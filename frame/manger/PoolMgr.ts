@@ -6,7 +6,7 @@
  */
 
 import { instantiate, Node } from "cc";
-import { PoolType } from "../EnumMgr";
+import { PageType, PoolType } from "../EnumMgr";
 
 /**
  * 节点管理类
@@ -14,10 +14,23 @@ import { PoolType } from "../EnumMgr";
 export class PoolMgr  {
     private _pool:Map<string,Node[]>;
 
-    constructor(){
+    init(cb:Function){
+        let count=0;
+        let maxLen=0;
+        var callBack=()=>{
+            count++;
+            if(count>=maxLen){
+                cb&&cb();
+            }
+        }
         this._pool=new Map<string,Node[]>();
-        for(let i in PoolType){
-            globalThis.resMgr.loadPerfab(i,null);
+        for(let key in PoolType){
+            maxLen++;
+            globalThis.resMgr.loadPerfab(PoolType[key],callBack);
+        }
+        for(let key in PageType){
+             maxLen++;
+            globalThis.resMgr.loadPerfab(PageType[key],callBack);
         }
     }
 
@@ -46,7 +59,13 @@ export class PoolMgr  {
             if(list.length<1){
                 return this.getNew(type);
             }else{
-                return list.pop();
+                let node=list.pop();
+                node.active=true;
+                for(let i=0;i<node.components.length;i++ ){
+                    //@ts-ignore
+                    node.components[i].reuse &&node.components[i].reuse();
+                }
+                return node;
             }
         }
     }
@@ -92,7 +111,7 @@ export class PoolMgr  {
      */
     public preLoad(type:PoolType,num:number){
         for(let i=0;i<num;i++){
-            this.put(this.get(type));
+            this.put(this.getNew(type));
         }
     }
 }
