@@ -14,7 +14,9 @@ export enum PageLeve{
 
 /**page */
 export enum PageType{
-    set="a/b/c"
+    CPageLog="prefabs/pages/CPageLog",
+    CPageNotes="prefabs/pages/CPageNotes",
+    CPageReset="prefabs/pages/CPageReset",
 }
 
 /**
@@ -26,7 +28,7 @@ export enum EventType{
     UI="UI",
     Page="Page",
     Data="Data",
-
+    Game_Start="Game_Start",
     UI_Money="UI_Money"
 
 }
@@ -42,4 +44,8 @@ export enum AudioType{
     start="audio/music/雨声"
 }
 
+export enum PageAniType{
+    fadeIn,
+    fadeOut,
+}
 
