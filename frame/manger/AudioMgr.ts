@@ -61,6 +61,10 @@ export class AudioNode{
         },this.debug)
     }
 
+    public stop(){
+        this.component.stop();
+    }
+
     public playShoot(){
         if(!this.audio) return;
         globalThis.resMgr.loadAudio(this.audio,(clip:AudioClip)=>{
@@ -128,6 +132,8 @@ export class AudioNode{
             cb&&cb();
         })
     }
+
+   
 
 }
 

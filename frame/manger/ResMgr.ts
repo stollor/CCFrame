@@ -11,9 +11,30 @@ export class ResMgr{
     public audioMaps:   Map<string, AudioClip>      = new  Map<string, AudioClip>();//音频
     public spineMaps:   Map<string, sp.SkeletonData>= new  Map<string, sp.SkeletonData>();//spine
     public imageMaps:   Map<string, SpriteFrame>    = new  Map<string, SpriteFrame>();//图片
-    public jsonMaps:    Map<string, object>            = new  Map<string, object>(); //json
+    public jsonMaps:    Map<string, object>         = new  Map<string, object>(); //json
     public tiledMaps:   Map<string, TiledMapAsset>  = new  Map<string, TiledMapAsset>(); //瓦片地图
 
+
+    /**
+     * 预加载资源
+     * @param list 
+     * @param loadBack 加载进度
+     * @param callBack 加载结束
+     */
+    proLoadPrefab(list:string[],loadBack:Function=null,callBack:Function=null)
+    {
+        let count=0;
+        let len=list.length;
+        for(let i=0;i<len;i++){
+            this.loadPerfab(list[i],()=>{
+                count++;
+                loadBack&&loadBack(i,len);
+                if(count>=len){
+                    callBack&&callBack();
+                }
+            })
+        }
+    }
 
 
      /**

@@ -1,7 +1,7 @@
 export enum LocalType{
-    playInfo="playInfo"
+    playInfo="playInfo",
+    firstGame="firstGame",
 }
-
 
 /**page的显示层级 */
 export enum PageLeve{
@@ -17,6 +17,15 @@ export enum PageType{
     CPageLog="prefabs/pages/CPageLog",
     CPageNotes="prefabs/pages/CPageNotes",
     CPageReset="prefabs/pages/CPageReset",
+    CPageRoom="prefabs/pages/CPageRoom",
+
+    CPageUI="prefabs/pages/CPageUI",
+    CPageUITip="prefabs/pages/CPageUITip",
+    CPageUIShare="prefabs/pages/CPageUIShare",
+    CPageUISet="prefabs/pages/CPageUISet",
+    CPagePropInfo="prefabs/pages/CPagePropInfo",
+
+    CPageMsgTip="prefabs/common/CPageMsgTip"
 }
 
 /**
@@ -49,3 +58,9 @@ export enum PageAniType{
     fadeOut,
 }
 
+
+export enum MsgCode{
+    err=-1,
+    done=0,
+    ok=1,
+}

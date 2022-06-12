@@ -1,10 +1,10 @@
 import { sys } from "cc";
-import { LocalType } from "../EnumMgr";
+import { LocalType, MsgCode } from "../EnumMgr";
 
 export class LocalDataMgr{
     private tempData={};
 
-    public playId="playId"
+    public playId="playId_"
 
     
 
@@ -21,7 +21,7 @@ export class LocalDataMgr{
     }
 
     public getData(key:LocalType){
-        let data = sys.localStorage.getItem(this.playId + "_" + key);
+        let data = sys.localStorage.getItem(this.playId + key);
         if (!data) return undefined;
         try {
             const jsonObj = JSON.parse(data)
@@ -30,5 +30,14 @@ export class LocalDataMgr{
             return data;
         }
     }
+
+
+    // public getDataJudge(key){
+    //     let val=this.getData(key);
+    //     if(val==undefined || val==false||val==MsgCode.err ||val=="-1"){
+    //         return false;
+    //     }
+    //     return true;
+    // }
 
 }

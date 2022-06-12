@@ -14,24 +14,8 @@ import { PageType, PoolType } from "../EnumMgr";
 export class PoolMgr  {
     private _pool:Map<string,Node[]>;
 
-    init(cb:Function){
-        let count=0;
-        let maxLen=0;
-        var callBack=()=>{
-            count++;
-            if(count>=maxLen){
-                cb&&cb();
-            }
-        }
+    constructor(){
         this._pool=new Map<string,Node[]>();
-        for(let key in PoolType){
-            maxLen++;
-            globalThis.resMgr.loadPerfab(PoolType[key],callBack);
-        }
-        for(let key in PageType){
-             maxLen++;
-            globalThis.resMgr.loadPerfab(PageType[key],callBack);
-        }
     }
 
     /**
@@ -39,7 +23,7 @@ export class PoolMgr  {
      * @param type 
      * @returns 
      */
-    public getNew(type:PoolType|string):Node{
+    public getNew(type:PoolType|PageType):Node{
         let node=instantiate(globalThis.resMgr.perfabMaps.get(type)); 
         node["path"]=type;
         return node;
@@ -50,7 +34,7 @@ export class PoolMgr  {
      * @param type 节点类型
      * @returns 
      */
-    public get(type:PoolType|string):Node{
+    public get(type:PoolType|PageType):Node{
         if(!this._pool.has(type)){
             this._pool.set(type,[]);
             return this.getNew(type);
@@ -99,7 +83,7 @@ export class PoolMgr  {
      * 清除节点池
      * @param type 
      */
-    public clear(type:PoolType){
+    public clear(type:PoolType|PageType){
         if(this._pool.has(type)){
             this._pool.delete(type);
         }
@@ -109,9 +93,20 @@ export class PoolMgr  {
      * 预加载节点
      * @param type 
      */
-    public preLoad(type:PoolType,num:number){
+    public preLoad(type:PoolType|PageType,num:number){
         for(let i=0;i<num;i++){
             this.put(this.getNew(type));
+        }
+    }
+
+    /**
+     * 预加载节点列表
+     * @param type 
+     * @param callBack 
+     */
+    public proLoadList(list:PoolType[]|PageType[],number:number){
+        for(let i=0;i<list.length;i++){
+            this.preLoad(list[i],number)
         }
     }
 }
