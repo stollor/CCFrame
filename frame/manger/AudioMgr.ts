@@ -143,11 +143,13 @@ export class AudioMgr{
     public Music:AudioNode;
     public Effect:AudioNode;
     public EffectOne:AudioNode;
+    public Story:AudioNode;
 
     constructor(){
         this.BG=new AudioNode();
         this.Music=new AudioNode();
         this.Effect=new AudioNode();
+        this.Story=new AudioNode();
     }
 
     public switchBG(type:AudioType,debug=false){
@@ -186,6 +188,14 @@ export class AudioMgr{
         this.EffectOne.volume=volume;
         this.EffectOne.debug=debug;
         this.EffectOne.playShoot();
+    }
+
+    public playStory(clip:AudioClip,volume:number,cb:Function=null){
+        this.Story.component.volume=volume;
+        this.Story.component.clip=clip;
+        this.Story.loop=false;
+        this.Story.cb=cb;
+        this.Story.component.play();
     }
 
 }

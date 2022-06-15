@@ -1,8 +1,9 @@
 
-import { Component, Sprite, SpriteFrame, UIOpacity } from 'cc';
+import { Component, Sprite, SpriteFrame, tween, UIOpacity } from 'cc';
 import { Button, Label, RichText } from 'cc';
 import { _decorator, Node} from 'cc';
 import { EventType } from '../EnumMgr';
+import { CTween } from '../utils/CTween';
 const { ccclass, property } = _decorator;
 
 @ccclass('CNodeCustom')
@@ -22,6 +23,8 @@ declare module 'cc' {
 
         /**增加的方法 */
         setStr:(str:string|number)=>void;
+        setStrStep:(str:string|number,speed:number,cb?:Function)=>void;
+        setStrStepByTime:(str:string|number,speed:number,cb?:Function)=>void;
         setImg:(frame:SpriteFrame)=>void;
         setImgRes:(path:string)=>void;
         onClick:(cb:(btn:Button)=>void,inter?:number)=>void;
@@ -58,6 +61,22 @@ Node.prototype.setStr=function(str:string|number){
     let comp=this.getComponent(Label);
     if(!comp) comp=this.getComponent(RichText);
     if(comp) comp.string=str;
+}
+
+Node.prototype.setStrStep=function(str:string|number,speed:number,cb:Function=null){
+    let comp=this.getComponent(Label);
+    if(!comp) comp=this.getComponent(RichText);
+    CTween.FromTo(String(str).length/speed,0,String(str).length,(progress)=>{
+        comp.string=String(str).slice(0,progress);
+    },null,()=>{cb&&cb()})
+}
+
+Node.prototype.setStrStepByTime=function(str:string|number,time:number,cb:Function=null){
+    let comp=this.getComponent(Label);
+    if(!comp) comp=this.getComponent(RichText);
+    CTween.FromTo(time,0,String(str).length,(progress)=>{
+        comp.string=String(str).slice(0,progress);
+    },null,()=>{cb&&cb()})
 }
 
 Node.prototype.setImg=function(frame:SpriteFrame){

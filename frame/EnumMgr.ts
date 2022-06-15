@@ -1,3 +1,4 @@
+/**本地存储数据 */
 export enum LocalType{
     playInfo="playInfo",
     firstGame="firstGame",
@@ -25,7 +26,8 @@ export enum PageType{
     CPageUISet="prefabs/pages/CPageUISet",
     CPagePropInfo="prefabs/pages/CPagePropInfo",
 
-    CPageMsgTip="prefabs/common/CPageMsgTip"
+    CPageMsgTip="prefabs/common/CPageMsgTip",
+    CPageStory="prefabs/pages/CPageDialogue",
 }
 
 /**
@@ -38,7 +40,9 @@ export enum EventType{
     Page="Page",
     Data="Data",
     Game_Start="Game_Start",
-    UI_Money="UI_Money"
+    UI_Money="UI_Money",
+
+    Story_Play="Story_play",
 
 }
 
@@ -53,14 +57,23 @@ export enum AudioType{
     start="audio/music/雨声"
 }
 
+/**页面出入场动画 */
 export enum PageAniType{
     fadeIn,
     fadeOut,
 }
 
-
+/**错误码 */
 export enum MsgCode{
     err=-1,
     done=0,
     ok=1,
+}
+
+
+/**资源路径 */
+export enum ResPath{
+    StroyJson="config/story/",
+    StroyImg="textures/story/",
+    StroyAudio="audio/story/"
 }
