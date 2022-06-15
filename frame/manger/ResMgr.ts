@@ -107,11 +107,11 @@ export class ResMgr{
     }
 
     loadJson(name: string, cb?: (p: any) => void) {
-        if (this.jsonMaps.has(name)) return cb && cb(this.jsonMaps.get(name));
+        if (this.jsonMaps.has(name)) return cb && cb(JSON.parse(JSON.stringify(this.jsonMaps.get(name))));
         resources.load(name, JsonAsset, (err, jsonAsset: JsonAsset) => {
             if (err) return cb && cb(null);
             this.jsonMaps.set(name, jsonAsset.json);
-            cb && cb(jsonAsset.json);
+            cb && cb(JSON.parse(JSON.stringify(jsonAsset.json)));
         })
     }
 

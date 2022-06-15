@@ -3,6 +3,7 @@ import { Component, Sprite, SpriteFrame, tween, UIOpacity } from 'cc';
 import { Button, Label, RichText } from 'cc';
 import { _decorator, Node} from 'cc';
 import { EventType } from '../EnumMgr';
+import { CTool } from '../utils/CTool';
 import { CTween } from '../utils/CTween';
 const { ccclass, property } = _decorator;
 
@@ -25,6 +26,7 @@ declare module 'cc' {
         setStr:(str:string|number)=>void;
         setStrStep:(str:string|number,speed:number,cb?:Function)=>void;
         setStrStepByTime:(str:string|number,speed:number,cb?:Function)=>void;
+        setRichStrStepByTime:(str:string,speed:number,cb?:Function)=>void;
         setImg:(frame:SpriteFrame)=>void;
         setImgRes:(path:string)=>void;
         onClick:(cb:(btn:Button)=>void,inter?:number)=>void;
@@ -64,18 +66,24 @@ Node.prototype.setStr=function(str:string|number){
 }
 
 Node.prototype.setStrStep=function(str:string|number,speed:number,cb:Function=null){
-    let comp=this.getComponent(Label);
-    if(!comp) comp=this.getComponent(RichText);
     CTween.FromTo(String(str).length/speed,0,String(str).length,(progress)=>{
-        comp.string=String(str).slice(0,progress);
+        this.setStr(String(str).slice(0,progress));
     },null,()=>{cb&&cb()})
 }
 
 Node.prototype.setStrStepByTime=function(str:string|number,time:number,cb:Function=null){
-    let comp=this.getComponent(Label);
-    if(!comp) comp=this.getComponent(RichText);
     CTween.FromTo(time,0,String(str).length,(progress)=>{
-        comp.string=String(str).slice(0,progress);
+        this.setStr(String(str).slice(0,progress));
+        this.onEnable();
+    },null,()=>{cb&&cb()})
+}
+
+Node.prototype.setRichStrStepByTime=function(str:string,time:number,cb:Function=null){
+    let richList=CTool.GetRichTextArrary(str);
+    let len=richList.length-1;
+    let sp=this.getComponent(RichText);
+    CTween.FromTo(time,0,len,(progress)=>{
+        sp.string=richList[~~(len-progress)];
     },null,()=>{cb&&cb()})
 }
 
