@@ -1,19 +1,12 @@
 import { AudioClip, JsonAsset, Prefab, resources, sp, SpriteFrame, TiledMapAsset } from "cc";
+import { DEBUG } from "cc/env";
 import { CLog } from "../utils/CLog";
 /**
  * 资源管理类
  * load加载
- * 通过XXXmap释放资源
+ * 自动释放资源
  */
 export class ResMgr{
-
-    public perfabMaps:  Map<string, Prefab>         = new  Map<string, Prefab>() ;//预制体
-    public audioMaps:   Map<string, AudioClip>      = new  Map<string, AudioClip>();//音频
-    public spineMaps:   Map<string, sp.SkeletonData>= new  Map<string, sp.SkeletonData>();//spine
-    public imageMaps:   Map<string, SpriteFrame>    = new  Map<string, SpriteFrame>();//图片
-    public jsonMaps:    Map<string, object>         = new  Map<string, object>(); //json
-    public tiledMaps:   Map<string, TiledMapAsset>  = new  Map<string, TiledMapAsset>(); //瓦片地图
-
 
     /**
      * 预加载资源
@@ -26,7 +19,7 @@ export class ResMgr{
         let count=0;
         let len=list.length;
         for(let i=0;i<len;i++){
-            this.loadPerfab(list[i],()=>{
+            this.loadPrefab(list[i],()=>{
                 count++;
                 loadBack&&loadBack(i,len);
                 if(count>=len){
@@ -43,11 +36,12 @@ export class ResMgr{
      * @param cb
      * @returns
      */
-    loadPerfab(path: string, cb?: (prefab: Prefab) => void) {
-        if (this.perfabMaps.has(path))return cb?.(this.perfabMaps.get(path));
+    loadPrefab(path: string, cb?: (prefab: Prefab) => void,debug:boolean=false) {
         resources.load(path, Prefab,(err: Error, prefab: Prefab)=> {
-            if (err) return cb?.(null);
-            this.perfabMaps.set(path, prefab);
+            if (err){
+                debug && CLog.err(err);
+                return cb?.(null);
+            } 
             cb?.(prefab);
         });
     }
@@ -59,15 +53,15 @@ export class ResMgr{
      * @param cb
      * @return
      */
-    loadAudio(name: string, cb?: (audioClip: AudioClip) => void,debug?:boolean): void {
-        if (this.audioMaps.has(name)) return cb && cb(this.audioMaps.get(name));
+    loadAudio(name: string, cb?: (audioClip: AudioClip) => void,debug:boolean=false): void {
         resources.load(name, AudioClip, (err, audio)=> {
             if (err){
-                if(debug) CLog.logList([`未找到音频:${name}`,err])
-                return cb && cb(null);
+                debug && CLog.logList([`未找到音频:${name}`,err])
+                cb?.(null);
+                return null
             } 
-            this.audioMaps.set(name, audio);
-            cb && cb(audio);
+            cb?.(audio);
+            return audio;
         })
     }
 
@@ -77,12 +71,13 @@ export class ResMgr{
      * @param cb 
      * @returns 
      */
-    loadSpineData(name, cb?: (skeleton: sp.SkeletonData) => void): void {
-        if (this.spineMaps.has(name)) return cb && cb(this.spineMaps.get(name));
+    loadSpineData(name, cb?: (skeleton: sp.SkeletonData) => void,debug:boolean=false): void {
         resources.load(name, sp.SkeletonData, (err, spine) => {
-            if (err) return cb && cb(null);
-            this.spineMaps.set(name, spine);
-            cb && cb(spine);
+            if (err){
+                debug && CLog.err(err);
+                return cb?.(null);
+            } 
+            cb?.(spine);
         })
     }
 
@@ -93,24 +88,23 @@ export class ResMgr{
     * @param booli18n  是否加载对应语言版本的图片
     * @returns 
     */
-    loadImage(name: string, cb?: (sprite: SpriteFrame) => void, booli18n: boolean = false) {
-        //if (booli18n) name = name + "_" + i18n._language;
-        if (this.imageMaps.has(name)) return cb && cb(this.imageMaps.get(name));
+    loadImage(name: string, cb?: (sprite: SpriteFrame) => void, booli18n: boolean = false,debug:boolean=false) {
         resources.load(name + "/spriteFrame", SpriteFrame, (err, image) => {
-            if (err) {
+            if (err){
                 if (booli18n) return this.loadImage(name, cb, false);
+                else debug && CLog.err(err);
                 return cb && cb(null);
-            }
-            this.imageMaps.set(name, image);
+            } 
             cb && cb(image);
         })
     }
 
-    loadJson(name: string, cb?: (p: any) => void) {
-        if (this.jsonMaps.has(name)) return cb && cb(JSON.parse(JSON.stringify(this.jsonMaps.get(name))));
+    loadJson(name: string, cb?: (p: any) => void,debug:boolean=false) {
         resources.load(name, JsonAsset, (err, jsonAsset: JsonAsset) => {
-            if (err) return cb && cb(null);
-            this.jsonMaps.set(name, jsonAsset.json);
+            if (err){
+                debug && CLog.err(err);
+                return cb?.(null);
+            } 
             cb && cb(JSON.parse(JSON.stringify(jsonAsset.json)));
         })
     }
@@ -121,11 +115,12 @@ export class ResMgr{
      * @param cb 
      * @returns 
      */
-    loadTiled(name: string, cb?: (p: any) => void) {
-        if (this.tiledMaps.has(name)) return cb && cb(this.tiledMaps.get(name));
+    loadTiled(name: string, cb?: (p: any) => void,debug:boolean=false) {
         resources.load(name, TiledMapAsset, (err, jsonAsset: TiledMapAsset) => {
-            if (err) return cb && cb(null);
-            this.tiledMaps.set(name, jsonAsset);
+            if (err){
+                debug && CLog.err(err);
+                return cb?.(null);
+            } 
             cb && cb(jsonAsset);
         })
     }

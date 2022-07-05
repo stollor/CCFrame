@@ -23,10 +23,13 @@ export class PoolMgr  {
      * @param type 
      * @returns 
      */
-    public getNew(type:PoolType|PageType):Node{
-        let node=instantiate(globalThis.resMgr.perfabMaps.get(type)); 
-        node["path"]=type;
-        return node;
+    public getNew(type:PoolType|PageType,cb:(node:Node)=>void){
+        globalThis.resMgr.loadPrefab(type,(prefab)=>{
+            if(!prefab) return;
+            let node=instantiate(prefab); 
+            node["path"]=type;
+            cb?.(node);
+        },true);
     }
 
     /**
@@ -34,14 +37,14 @@ export class PoolMgr  {
      * @param type 节点类型
      * @returns 
      */
-    public get(type:PoolType|PageType):Node{
+    public get(type:PoolType|PageType,cb:(node:Node)=>void){
         if(!this._pool.has(type)){
             this._pool.set(type,[]);
-            return this.getNew(type);
+            this.getNew(type,cb);
         }else{
             let list=this._pool.get(type);
             if(list.length<1){
-                return this.getNew(type);
+                this.getNew(type,cb);
             }else{
                 let node=list.pop();
                 node.active=true;
@@ -95,7 +98,10 @@ export class PoolMgr  {
      */
     public preLoad(type:PoolType|PageType,num:number){
         for(let i=0;i<num;i++){
-            this.put(this.getNew(type));
+            this.getNew(type,(node)=>{
+                this.put(node);
+            })
+           
         }
     }
 

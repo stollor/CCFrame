@@ -33,6 +33,8 @@ declare module 'cc' {
         onEvent:(type:EventType,event:Function)=>void;
         onEventMap:(Map:Map<EventType,Array<Function>>)=>void;
     }
+
+   
 }
 
 
@@ -74,7 +76,6 @@ Node.prototype.setStrStep=function(str:string|number,speed:number,cb:Function=nu
 Node.prototype.setStrStepByTime=function(str:string|number,time:number,cb:Function=null){
     CTween.FromTo(time,0,String(str).length,(progress)=>{
         this.setStr(String(str).slice(0,progress));
-        this.onEnable();
     },null,()=>{cb&&cb()})
 }
 

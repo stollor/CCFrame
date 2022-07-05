@@ -1,4 +1,4 @@
-import { tween, TweenEasing ,Node} from "cc";
+import { tween, TweenEasing ,Node, v3} from "cc";
 import { PageAniType } from "../EnumMgr";
 
 export class CTween{
@@ -54,5 +54,15 @@ export class CTween{
           .to(time,{oparity:0},{easing:"circOut"})
           .call(cb)
           .start();
+    }
+
+
+    public static upDown(node:Node,dis:number=10){
+       tween(node)
+          .by(0.3,{position:v3(0,dis,0)})
+          .by(0.3,{position:v3(0,-dis,0)})
+          .union()
+          .repeatForever()
+          .start()
     }
 }

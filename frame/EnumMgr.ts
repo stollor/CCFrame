@@ -19,6 +19,7 @@ export enum PageType{
     CPageNotes="prefabs/pages/CPageNotes",
     CPageReset="prefabs/pages/CPageReset",
     CPageRoom="prefabs/pages/CPageRoom",
+    CPageRoomDetail="prefabs/pages/CPageRoomDetail",
 
     CPageUI="prefabs/pages/CPageUI",
     CPageUITip="prefabs/pages/CPageUITip",

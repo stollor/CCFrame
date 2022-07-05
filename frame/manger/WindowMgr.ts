@@ -35,15 +35,17 @@ export class WindowMgr{
     }
 
     open(type:PageType,leve:PageLeve,data=null,ani:PageAniType=PageAniType.fadeIn){
-        let page:Node=globalThis.poolMgr.get(type);
-        let parent:Node=find("Canvas/pages/"+leve);
-        parent.addChild(page);
-        CTween.runPageAni(page,ani);
-        if(!data|| !page.components) return;
-        for(let i=0;i<page.components.length;i++){
-            //@ts-ignore
-            page.components[i].init?.(data);
-        } 
+        globalThis.poolMgr.get(type,(page)=>{
+            let parent:Node=find("Canvas/pages/"+leve);
+            parent.addChild(page);
+            CTween.runPageAni(page,ani);
+            if(!data|| !page.components) return;
+            for(let i=0;i<page.components.length;i++){
+                //@ts-ignore
+                page.components[i].init?.(data);
+            } 
+        });
+       
 
     }
 

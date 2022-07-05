@@ -4,7 +4,7 @@ import { LocalType, MsgCode } from "../EnumMgr";
 export class LocalDataMgr{
     private tempData={};
 
-    public playId="playId_"
+    public playId="playId"+"_";
 
     
 
