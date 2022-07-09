@@ -21,10 +21,14 @@ export class CLog{
       }
     }
 
+    static log(msg,color="#AACCBB"){
+        if(!this.debug) return;
+        console.log(`%c${msg}`,`color:${color};background:#000000`)
+    }
+
     static err(...msg){
       if(!this.debug) return;
       let color="#AA2323";
       console.log(`%c${msg}`,`color:#FFFFFF;background:${color}`);
-
     }
 }

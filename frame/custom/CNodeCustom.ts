@@ -15,7 +15,7 @@ export class CNodeCustom extends Component {
 declare module 'cc' {
     interface Node {
         /**扩展的方法 */
-        on: (type, callback, target, useCapture?, video?) => void;
+        //on: (type, callback, target, useCapture?, video?) => void;
         destory:()=>boolean;
         //oparity:number;
         set oparity(val:number);
@@ -29,7 +29,9 @@ declare module 'cc' {
         setRichStrStepByTime:(str:string,speed:number,cb?:Function)=>void;
         setImg:(frame:SpriteFrame)=>void;
         setImgRes:(path:string)=>void;
-        onClick:(cb:(btn:Button)=>void,inter?:number)=>void;
+        onClick:(cb:Function,inter?:number)=>void;
+        offClick:(cb:Function)=>void;
+        clearClickEvents:()=>void;
         onEvent:(type:EventType,event:Function)=>void;
         onEventMap:(Map:Map<EventType,Array<Function>>)=>void;
     }
@@ -38,19 +40,7 @@ declare module 'cc' {
 }
 
 
-var NodeOn: Function = Node.prototype.on;
-Node.prototype.on = function (type, callback, target, useCapture, video) {
-    let cb = callback;
-    switch (type) {
-        case Button.EventType.CLICK:
-            cb = function (data) {
-                callback?.call(this, data);
-            }
-            ; break;
-        default: break;
-    }
-    NodeOn.call(this, type, cb, target, useCapture);
-}
+
 
 var NodeDestory:Function=Node.prototype.destroy;
 Node.prototype.destroy=function(){
@@ -99,7 +89,7 @@ Node.prototype.setImgRes=function(path:string){
     })
 }
 
-Node.prototype.onClick=function(cb:(btn:Button)=>void,inter:number=-1,opt:any={}){
+Node.prototype.onClick=function(cb:Function,inter:number=-1,opt:any={}){
     let btn:Button=this.getComponent(Button);
     if(!btn) btn=this.addComponent(Button);
     btn.transition=opt?.transition?opt?.transition:3;
@@ -107,10 +97,25 @@ Node.prototype.onClick=function(cb:(btn:Button)=>void,inter:number=-1,opt:any={}
         if(inter>0) {
             btn.interactable=false;
             btn.scheduleOnce(()=>{btn.interactable=true;},inter);
-        }
-        cb&&cb(btn);
-    },this);
+        }}
+    ,this);
+    this.on(Button.EventType.CLICK,cb,this);
+    //this.on(Button.EventType.)
 }
+
+Node.prototype.offClick=function(cb:Function){
+    this.off(Button.EventType.CLICK,cb,this);
+}
+
+
+Node.prototype.clearClickEvents=function(){
+    let btn:Button=this.getComponent(Button);
+    if(!btn) btn=this.addComponent(Button);
+    while(btn.clickEvents.length>0){
+        btn.clickEvents.pop();
+    }
+}
+
 
 Node.prototype.onEvent=function(type:EventType,event:Function){
     globalThis?.eventMgr?.on(type,event,this)

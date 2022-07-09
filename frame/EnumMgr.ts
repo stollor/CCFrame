@@ -44,7 +44,8 @@ export enum EventType{
     UI_Money="UI_Money",
 
     Story_Play="Story_play",
-
+    Prop_RoomClick="Prop_RoomClick",
+    Prop_BagUse="Prop_BagUse"
 }
 
 
