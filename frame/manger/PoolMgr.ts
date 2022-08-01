@@ -54,7 +54,7 @@ export class PoolMgr  {
             this._log &&CLog.log(`pool===>池中无${type},创建[],返回new 对象`);
             this.getNew(type,cb);
         }else{
-            let list=this._pool.get(type);
+            let list=this._pool.get(type)||[];
             if(list.length<1){
                 this._log &&CLog.log(`pool===>池中${type}为空,返回new 对象`);
                 this.getNew(type,cb);
@@ -85,10 +85,10 @@ export class PoolMgr  {
                 //@ts-ignore
                 node.components[i].unuse &&node.components[i].unuse();
             }
-            let list:Node[]=this._pool.get(path);
+            let list:Node[]=this._pool.get(path)||[];
             if(!list){
                 this._pool.set(path,[node]);
-                this._log &&CLog.log(`pool===>回收${path},新建节点池,现在长:${list.length}`);
+                this._log &&CLog.log(`pool===>回收${path},新建节点池`);
             }else{
                 list.push(node);
                 this._log &&CLog.log(`pool===>回收${path},现在节点池长:${list.length}`);

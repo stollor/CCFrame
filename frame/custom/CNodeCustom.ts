@@ -50,7 +50,9 @@ Node.prototype.destroy=function(){
 
 
 
-
+/**
+ * 设置文字
+ */
 Node.prototype.setStr=function(str:string|number){
     let comp=this.getComponent(Label);
     if(!comp) comp=this.getComponent(RichText);
@@ -80,7 +82,9 @@ Node.prototype.setRichStrStepByTime=function(str:string,time:number,cb:Function=
 
 Node.prototype.setImg=function(frame:SpriteFrame){
     let comp=this.getComponent(Sprite);
-    if(comp) comp.spriteFrame=frame;
+    if(!comp || !frame) return;
+    comp.spriteFrame=frame;
+    this.addAutoReleaseAsset(frame);
 }
 
 Node.prototype.setImgRes=function(path:string){

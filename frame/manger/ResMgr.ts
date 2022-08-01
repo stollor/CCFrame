@@ -14,7 +14,7 @@ export class ResMgr{
      * @param loadBack 加载进度
      * @param callBack 加载结束
      */
-    proLoadPrefab(list:string[],loadBack:Function=null,callBack:Function=null)
+    proLoadPrefab(list:string[],loadBack:Function=()=>{},callBack:Function=()=>{})
     {
         let count=0;
         let len=list.length;

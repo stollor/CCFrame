@@ -86,17 +86,17 @@ export class AudioNode{
     private onEnd(){
         this.cb&&this.cb();
         this.cbOnec&&this.cbOnec();
-        this.cbOnec=null;
+        this.cbOnec=()=>{};
         if(this.loop) this.play();
         else{
-            this.cb=null;
+            this.cb=()=>{};
         }
        
     }
 
 
     /**渐显效果 */
-    private runFadeIn(scale:number=0.2,cb=null){
+    private runFadeIn(scale:number=0.2,cb=()=>{}){
         if(this.debug)console.log(`渐显=>${this.audio}`)
         if(this.fadeIn && this.component.playing){
             if(this.debug)console.log(`渐显播放...`)
@@ -110,7 +110,7 @@ export class AudioNode{
     }
 
     /**渐隐效果 */
-    private runFadeOut(scale:number=0.2,cb=null){
+    private runFadeOut(scale:number=0.2,cb=()=>{}){
         if(this.debug)console.log(`渐隐=>${this.audio}`)
         if(this.fadeOut &&this.component.playing){
             if(this.debug)console.log(`渐隐播放...`)
@@ -124,7 +124,7 @@ export class AudioNode{
     }
 
     /**切换至 */
-    public switchTo(type:AudioType,cb:Function=null){
+    public switchTo(type:AudioType,cb:Function=()=>{}){
         this.runFadeOut(0.1,()=>{
             this.component.stop();
             this.audio=type;
@@ -157,10 +157,10 @@ export class AudioMgr{
         this.BG.fadeOut=true;
         this.BG.loop=true;
         this.BG.debug=debug;
-        this.BG.switchTo(type)
+        this.BG.switchTo(type);
     }
 
-    public playMusic(type:AudioType,volume:number,loop:boolean=false,cb:Function=null,debug:boolean=false){
+    public playMusic(type:AudioType,volume:number,loop:boolean=false,cb:Function=()=>{},debug:boolean=false){
         this.Music.fadeIn=true;
         this.Music.audio=type;
         this.Music.loop=loop;
@@ -170,17 +170,17 @@ export class AudioMgr{
         this.Music.play();
     }
 
-    public playEffect(type:AudioType,volume:number,loop:boolean=false,cb:Function=null,debug:boolean=false){
+    public playEffect(type:AudioType,volume:number,loop:boolean=false,cb?:Function,debug:boolean=false){
         this.Effect.fadeIn=true;
         this.Effect.audio=type;
         this.Effect.loop=loop;
-        this.Effect.cb=cb;
+        this.Effect.cb=cb?cb:()=>null;
         this.Effect.volume=volume;
         this.Effect.debug=debug;
         this.Effect.play();
     }
 
-    public playOneShot(type:AudioType,volume:number,cb:Function=null,debug:boolean=false){
+    public playOneShot(type:AudioType,volume:number,cb:Function=()=>{},debug:boolean=false){
         this.EffectOne.fadeIn=true;
         this.EffectOne.audio=type;
         this.EffectOne.cb=cb;
@@ -190,7 +190,7 @@ export class AudioMgr{
         this.EffectOne.playShoot();
     }
 
-    public playStory(clip:AudioClip,volume:number,cb:Function=null){
+    public playStory(clip:AudioClip,volume:number,cb:Function=()=>{}){
         this.Story.component.volume=volume;
         this.Story.component.clip=clip;
         this.Story.loop=false;
