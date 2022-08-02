@@ -98,4 +98,6 @@ declare global {
         /**本地数据管理 */
         var localDataMgr:LocalDataMgr;
     }
+
 }
+

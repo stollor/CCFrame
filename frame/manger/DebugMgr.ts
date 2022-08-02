@@ -1,6 +1,8 @@
+import { DEBUG } from "cc/env";
 export class DebugMgr{
      public static updataSwitch(){
-        globalThis.poolMgr.debugLog=true;
+        globalThis.poolMgr.log=DEBUG;
+        globalThis.windowMgr.log=DEBUG;
      }
 
 }

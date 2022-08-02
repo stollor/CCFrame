@@ -1,5 +1,4 @@
 import { AudioClip, JsonAsset, Prefab, resources, sp, SpriteFrame, TiledMapAsset } from "cc";
-import { DEBUG } from "cc/env";
 import { CLog } from "../utils/CLog";
 /**
  * 资源管理类
@@ -7,6 +6,7 @@ import { CLog } from "../utils/CLog";
  * 自动释放资源
  */
 export class ResMgr{
+    public log:boolean = false;
 
     /**
      * 预加载资源
@@ -39,7 +39,7 @@ export class ResMgr{
     loadPrefab(path: string, cb?: (prefab: Prefab) => void,debug:boolean=false) {
         resources.load(path, Prefab,(err: Error, prefab: Prefab)=> {
             if (err){
-                debug && CLog.err(err);
+                debug && CLog.err(err,this.log);
                 return cb?.(null);
             } 
             cb?.(prefab);
@@ -56,7 +56,7 @@ export class ResMgr{
     loadAudio(name: string, cb?: (audioClip: AudioClip) => void,debug:boolean=false): void {
         resources.load(name, AudioClip, (err, audio)=> {
             if (err){
-                debug && CLog.logList([`未找到音频:${name}`,err])
+                debug && CLog.logList([`未找到音频:${name}`,err],this.log)
                 cb?.(null);
                 return null
             } 
@@ -74,7 +74,7 @@ export class ResMgr{
     loadSpineData(name, cb?: (skeleton: sp.SkeletonData) => void,debug:boolean=false): void {
         resources.load(name, sp.SkeletonData, (err, spine) => {
             if (err){
-                debug && CLog.err(err);
+                debug && CLog.err(err,this.log);
                 return cb?.(null);
             } 
             cb?.(spine);
@@ -92,7 +92,7 @@ export class ResMgr{
         resources.load(name + "/spriteFrame", SpriteFrame, (err, image) => {
             if (err){
                 if (booli18n) return this.loadImage(name, cb, false);
-                else debug && CLog.err(err);
+                else debug && CLog.err(err,this.log);
                 return cb && cb(null);
             } 
             cb && cb(image);
@@ -102,7 +102,7 @@ export class ResMgr{
     loadJson(name: string, cb?: (p: any) => void,debug:boolean=false) {
         resources.load(name, JsonAsset, (err, jsonAsset: JsonAsset) => {
             if (err){
-                debug && CLog.err(err);
+                debug && CLog.err(err,this.log);
                 return cb?.(null);
             } 
             cb && cb(JSON.parse(JSON.stringify(jsonAsset.json)));
@@ -118,7 +118,7 @@ export class ResMgr{
     loadTiled(name: string, cb?: (p: any) => void,debug:boolean=false) {
         resources.load(name, TiledMapAsset, (err, jsonAsset: TiledMapAsset) => {
             if (err){
-                debug && CLog.err(err);
+                debug && CLog.err(err,this.log);
                 return cb?.(null);
             } 
             cb && cb(jsonAsset);

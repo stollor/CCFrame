@@ -6,7 +6,7 @@
  */
 
 import { instantiate, Node } from "cc";
-import { DEBUG } from "cc/env";
+import { ColorType } from "../EnumMgr";
 import { CLog } from "../utils/CLog";
 
 
@@ -16,15 +16,9 @@ import { CLog } from "../utils/CLog";
  */
 export class PoolMgr {
     private _pool: Map<string, Node[]>;
-    private _log: boolean = true;
+    public log: boolean = false;
 
-    get debugLog() {
-        return this._log;
-    }
-
-    set debugLog(val) {
-        this._log = val;
-    }
+    
 
     constructor() {
         this._pool = new Map<string, Node[]>();
@@ -66,17 +60,17 @@ export class PoolMgr {
     public get(type: string, cb: (node: Node) => void) {
         if (!this._pool.has(type)) {
             this._pool.set(type, []);
-            this._log && CLog.log(`pool(get)===>池中无${type},创建[],返回new 对象`);
+            CLog.log(`pool(get)===>池中无${type},创建[],返回new 对象`,ColorType.绿,this.log);
             this.getNew(type, cb);
         } else {
             let list = this._pool.get(type) || [];
             if (list.length < 1) {
-                this._log && CLog.log(`pool(get)===>池中${type}为空,返回new 对象`);
+                CLog.log(`pool(get)===>池中${type}为空,返回new 对象`,ColorType.绿,this.log);
                 this.getNew(type, cb);
             } else {
                 let node = list.pop();
                 node.active = true;
-                this._log && CLog.log(`pool(get)===>池中有${type},返回pop对象,剩余${list.length}`);
+                CLog.log(`pool(get)===>池中有${type},返回pop对象,剩余${list.length}`,ColorType.绿,this.log);
                 for (let i = 0; i < node.components.length; i++) {
                     //@ts-ignore
                     node.components[i].reuse && node.components[i].reuse();
@@ -139,14 +133,14 @@ export class PoolMgr {
             let list: Node[] = this._pool.get(path) || [];
             if (!list) {
                 this._pool.set(path, [node]);
-                this._log && CLog.log(`pool(put)===>回收${path},新建节点池`);
+                CLog.log(`pool(put)===>回收${path},新建节点池`,ColorType.绿,this.log);
             } else {
                 let same = list.find(item => item.uuid == node.uuid);
                 if (same) {
-                    CLog.log(`pool(put)===>回收${path},池中有已有该节点,现长${list.length}`);
+                    CLog.log(`pool(put)===>回收${path},池中有已有该节点,现长${list.length}`,ColorType.绿,this.log);
                 } else {
                     list.push(node);
-                    CLog.log(`pool(put)===>回收${path},现在节点池长:${list.length}`);
+                    CLog.log(`pool(put)===>回收${path},现在节点池长:${list.length}`,ColorType.绿,this.log);
                 }
             }
         } else {
@@ -198,7 +192,7 @@ export class PoolMgr {
             }
             this._pool.delete(type);
         }
-        this._log && CLog.log(this._pool);
+        CLog.log(this._pool,ColorType.绿,this.log);
     }
 
 

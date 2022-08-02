@@ -1,8 +1,10 @@
 import { find ,Layers,Node, tween, Widget} from "cc";
-import { PageAniType, PageLeve, PageType } from "../EnumMgr";
+import { ColorType, PageAniType, PageLeve, PageType } from "../EnumMgr";
+import { CLog } from "../utils/CLog";
 import { CTween } from "../utils/CTween";
 
 export class WindowMgr{
+    public log: boolean = false;
 
     constructor(){
         this.init();
@@ -35,15 +37,26 @@ export class WindowMgr{
     }
 
     open(type:PageType,leve:PageLeve,data=null,ani:PageAniType=PageAniType.fadeIn){
+        CLog.log(`windowMgr===>请求打开${leve}页面${type}`,ColorType.橙,this.log);
         globalThis.poolMgr.get(type,(page)=>{
             let parent:Node=find("Canvas/pages/"+leve);
             parent.addChild(page);
-            CTween.runPageAni(page,ani);
-            if(!data|| !page.components) return;
+            if(!page.components)return;
+            CTween.runPageAni(page,ani,()=>{
+                for(let i=0;i<page.components.length;i++){
+                    //@ts-ignore
+                    page.components[i].overPageAni?.(data);
+                } 
+            });
+
+            if(!data) return;
+
             for(let i=0;i<page.components.length;i++){
                 //@ts-ignore
                 page.components[i].init?.(data);
             } 
+
+            CLog.log(`windowMgr===>${leve}页面${type}打开完毕`,ColorType.绿,this.log);
         });
        
 
@@ -53,15 +66,15 @@ export class WindowMgr{
         CTween.runPageAni(page,ani,()=>{
             globalThis.poolMgr.put(page);
         });
-        
+        CLog.log(`windowMgr===>关闭页面${page.name}`,ColorType.绿,this.log);
     }
 
     activeLevels(leves:PageLeve[],active:boolean){
         for(let i=0;i<leves.length;i++){
           let parent:Node=find("Canvas/pages/"+leves[i]);
           parent.active=active;
+          CLog.log(`windowMgr===>level页面${parent.name}置为${active}`,ColorType.绿,this.log);
         }
-        
     }
 
   
