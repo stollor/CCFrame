@@ -1,6 +1,11 @@
 
 export class CTool{
 
+    /**
+     * 获取富文本打字机数组
+     * @param str 传入富文本
+     * @returns 返回字符串数组(0->leng:最长->最短)
+     */
     public static GetRichTextArrary(str:string){
         let charArr = str.replace(/<.+?\/?>/g, '').split('');
         let tempStrArr = [str];
