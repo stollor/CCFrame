@@ -1,34 +1,32 @@
 import { DEBUG } from "cc/env";
+import { ColorType } from "../EnumMgr";
 
-var colorList=["#AABBCC","#AACCBB","#BBAACC","#BBCCAA","#CCBBAA","#CCAABB"]
+
 export class CLog{
-
-    public static debug=DEBUG;
     
     static getColor(index:number){
-      return colorList[index%colorList.length];
+      return ColorType[index% Object.keys(ColorType).length];
     }
 
     static getRandomColor(){
-      return colorList[~~(colorList.length*Math.random())];
+      return this.getColor[~~(Object.keys(ColorType).length*Math.random())];
     }
 
-    static logList(list:any[]){
-      if(!this.debug) return;
+    static logList(list:any[],log:boolean=DEBUG){
+      if(!log) return;
       let color=this.getRandomColor();
       for(let i=0;i<list.length;i++){
-          console.log(`%c${list[i]}`,`color:#000000;background:${color}`);
+          console.log(`%c${list[i]}`,`color:${ColorType.黑};background:${color}`);
       }
     }
 
-    static log(msg,color="#AACCBB"){
-        if(!this.debug) return;
-        console.log(`%c${msg}`,`color:${color};background:#000000`)
+    static log(msg,color=ColorType.绿,log:boolean=DEBUG){
+        if(!log) return;
+        console.log(`%c${msg}`,`color:${ColorType.黑};background:${color}`)
     }
 
-    static err(...msg){
-      if(!this.debug) return;
-      let color="#AA2323";
-      console.log(`%c${msg}`,`color:#FFFFFF;background:${color}`);
+    static err(msg,log:boolean=DEBUG){
+      if(!log) return;
+      console.log(`%c${msg}`,`color:${ColorType.白};background:${ColorType.红}`);
     }
 }

@@ -108,4 +108,6 @@ declare global {
         /**配置表读取 */
         var configMgr: ConfigMgr;
     }
+
 }
+

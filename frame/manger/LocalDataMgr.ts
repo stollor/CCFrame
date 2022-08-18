@@ -1,5 +1,5 @@
 import { sys } from "cc";
-import { LocalType, MsgCode } from "../EnumMgr";
+import { LocalType } from "../EnumMgr";
 
 export class LocalDataMgr {
     private tempData = {};

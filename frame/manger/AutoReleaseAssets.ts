@@ -1,10 +1,7 @@
-import { isValid } from 'cc';
-import { Component,  _decorator, Node,Asset } from 'cc';
+import {  _decorator,Asset,isValid } from 'cc';
 const { ccclass, property ,menu} = _decorator;
 
-
 @ccclass('AutoReleaseAssets')
-@menu('资源管理/AutoReleaseAssets/自动释放资源')
 export class AutoReleaseAssets {
 
     private dynamicsAssets: Asset[] = [];
