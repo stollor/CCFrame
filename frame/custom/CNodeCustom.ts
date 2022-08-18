@@ -29,7 +29,7 @@ declare module 'cc' {
         setRichStrStepByTime:(str:string,speed:number,cb?:Function)=>void;
         setImg:(frame:SpriteFrame)=>void;
         setImgRes:(path:string)=>void;
-        onClick:(cb:Function,inter?:number)=>void;
+        onClick:(cb:Function,inter?:number,opt?:any)=>void;
         offClick:(cb:Function)=>void;
         clearClickEvents:()=>void;
         onEvent:(type:EventType,event:Function)=>void;

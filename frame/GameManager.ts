@@ -1,6 +1,7 @@
 import { Game } from "cc";
 import { EventType, PageType } from "./EnumMgr";
 import { AudioMgr } from "./manger/AudioMgr";
+import { ConfigMgr } from "./manger/ConfigMgr";
 import { EventMgr } from "./manger/EventMgr";
 import { LocalDataMgr } from "./manger/LocalDataMgr";
 import { PoolMgr } from "./manger/PoolMgr";
@@ -16,69 +17,76 @@ import { WindowMgr } from "./manger/WindowMgr";
  */
 export class GameManager {
 
-
     /**资源加载 */
-    private  _resMgr:ResMgr;
+    private _resMgr: ResMgr;
     /**节点缓存 */
-    private  _poolMgr:PoolMgr;
+    private _poolMgr: PoolMgr;
     /**声音管理 */
-    private  _audioMgr:AudioMgr;
+    private _audioMgr: AudioMgr;
     /**事件管理 */
-    private  _eventMgr:EventMgr;
+    private _eventMgr: EventMgr;
     /**页面管理 */
-    private _windowMgr:WindowMgr;
+    private _windowMgr: WindowMgr;
     /**本地数据管理 */
-    private _localDataMgr:LocalDataMgr;
+    private _localDataMgr: LocalDataMgr;
+    /**配置表读取 */
+    private _configMgr: ConfigMgr;
 
-    get resMgr(){
-        if(!this._resMgr) this._resMgr=new ResMgr();
+    get resMgr() {
+        if (!this._resMgr) this._resMgr = new ResMgr();
         return this._resMgr;
     }
 
-    get poolMgr(){
-         if(!this._poolMgr) this._poolMgr=new PoolMgr();
+    get poolMgr() {
+        if (!this._poolMgr) this._poolMgr = new PoolMgr();
         return this._poolMgr;
     }
 
-    get audioMgr(){
-         if(!this._audioMgr) this._audioMgr=new AudioMgr();
+    get audioMgr() {
+        if (!this._audioMgr) this._audioMgr = new AudioMgr();
         return this._audioMgr;
     }
 
 
-    get eventMgr(){
-         if(!this._eventMgr) this._eventMgr=new EventMgr();
+    get eventMgr() {
+        if (!this._eventMgr) this._eventMgr = new EventMgr();
         return this._eventMgr;
     }
 
-    get windowMgr(){
-        if(!this._windowMgr) this._windowMgr=new WindowMgr();
+    get windowMgr() {
+        if (!this._windowMgr) this._windowMgr = new WindowMgr();
         return this._windowMgr;
     }
 
-    get localDataMgr(){
-        if(!this._localDataMgr) this._localDataMgr=new LocalDataMgr();
+    get localDataMgr() {
+        if (!this._localDataMgr) this._localDataMgr = new LocalDataMgr();
         return this._localDataMgr;
     }
 
-    private static _getInstance:GameManager;
-    public static getInstance(){
-        if(!this._getInstance) this._getInstance=new GameManager();
+    get configMgr() {
+        if (!this._configMgr) this._configMgr = new ConfigMgr();
+        return this._configMgr;
+    }
+
+    private static _getInstance: GameManager;
+    public static getInstance() {
+        if (!this._getInstance) this._getInstance = new GameManager();
         return this._getInstance;
     }
 
-    public static init(){
-        globalThis.resMgr=GameManager.getInstance().resMgr;
-        globalThis.eventMgr=GameManager.getInstance().eventMgr;
-        globalThis.poolMgr=GameManager.getInstance().poolMgr;
-        globalThis.audioMgr=GameManager.getInstance().audioMgr;
-        globalThis.windowMgr=GameManager.getInstance().windowMgr;
-        globalThis.localDataMgr=GameManager.getInstance().localDataMgr;
+    public static init() {
+        globalThis.resMgr = GameManager.getInstance().resMgr;
+        globalThis.eventMgr = GameManager.getInstance().eventMgr;
+        globalThis.poolMgr = GameManager.getInstance().poolMgr;
+        globalThis.audioMgr = GameManager.getInstance().audioMgr;
+        globalThis.windowMgr = GameManager.getInstance().windowMgr;
+        globalThis.localDataMgr = GameManager.getInstance().localDataMgr;
+        globalThis.configMgr = GameManager.getInstance().configMgr;
 
 
-        globalThis.resMgr.proLoadPrefab([PageType.CPageLog],null,()=>{
-            globalThis.poolMgr.proLoadList([PageType.CPageLog],1)
-            globalThis.eventMgr.emit(EventType.Game_Start,null);
+        globalThis.resMgr.proLoadPrefab([PageType.CPageLog], null, () => {
+            globalThis.poolMgr.proLoadList([PageType.CPageLog], 1)
+            globalThis.eventMgr.emit(EventType.Game_Start, null);
         })
     }
 }
@@ -86,16 +94,18 @@ export class GameManager {
 declare global {
     namespace globalThis {
         /**资源管理 */
-        var resMgr:ResMgr;
+        var resMgr: ResMgr;
         /**全局事件 */
-        var eventMgr:EventMgr;
+        var eventMgr: EventMgr;
         /**节点�? */
-        var poolMgr:PoolMgr;
+        var poolMgr: PoolMgr;
         /**声音管理 */
-        var audioMgr:AudioMgr;
+        var audioMgr: AudioMgr;
         /**页面管理 */
-        var windowMgr:WindowMgr;
+        var windowMgr: WindowMgr;
         /**本地数据管理 */
-        var localDataMgr:LocalDataMgr;
+        var localDataMgr: LocalDataMgr;
+        /**配置表读取 */
+        var configMgr: ConfigMgr;
     }
 }

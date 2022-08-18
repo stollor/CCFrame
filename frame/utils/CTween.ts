@@ -5,6 +5,9 @@ export class CTween{
 
     public static runPageAni(node:Node,type:PageAniType,cb:Function=null){
         switch(type){
+          case PageAniType.none:
+              cb&&cb();    
+          break;
           case PageAniType.fadeIn:
               this.fadeIn(node,0.4,cb);
               break;
