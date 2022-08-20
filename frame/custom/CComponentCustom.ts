@@ -3,8 +3,8 @@ import { Component, Sprite, SpriteFrame, tween, UIOpacity } from 'cc';
 import { Button, Label, RichText } from 'cc';
 import { Asset } from 'cc';
 import { isValid } from 'cc';
-import { _decorator, Node} from 'cc';
-import { EventType } from '../EnumMgr';
+import { _decorator, Node } from 'cc';
+import { EventType } from '../../../mgr/EnumMgr';
 import { AutoReleaseAssets } from '../manger/AutoReleaseAssets';
 import { CTool } from '../utils/CTool';
 import { CTween } from '../utils/CTween';
@@ -18,11 +18,11 @@ export class CComponentCustom extends Component {
 
 declare module 'cc' {
     interface Component {
-        addAutoReleaseAsset:(_asset:Asset)=>void;
-        addAutoReleaseAssets:(_assets:Asset[])=>void;
+        addAutoReleaseAsset: (_asset: Asset) => void;
+        addAutoReleaseAssets: (_assets: Asset[]) => void;
     }
 
-   
+
 }
 
 
@@ -34,7 +34,7 @@ Component.prototype.addAutoReleaseAsset = function (_asset: Asset) {
     oneTempAuto.addAutoReleaseAsset(_asset);
 };
 
-Component.prototype.addAutoReleaseAssets = function (_assets:Asset[]) {
+Component.prototype.addAutoReleaseAssets = function (_assets: Asset[]) {
     let moreTempAuto = this.node.getComponent(AutoReleaseAssets);
     if (!isValid(moreTempAuto)) {
         moreTempAuto = this.node.addComponent(AutoReleaseAssets);

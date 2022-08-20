@@ -1,5 +1,5 @@
 import { sys } from "cc";
-import { LocalType } from "../EnumMgr";
+import { LocalType } from "../../../mgr/EnumMgr";
 
 export class LocalDataMgr {
     private tempData = {};
@@ -31,6 +31,22 @@ export class LocalDataMgr {
         }
     }
 
+    public addListItem(key: string, data: any, repeat: boolean = false) {
+        let local = this.getData(key);
+        if (!local) local = [];
+        if (!repeat) {
+            if (local.indexOf(data) >= 0) return;
+        }
+        local.push(data);
+        this.setData(key, local);
+    }
+
+    public checkListItem(key, data) {
+        let list = globalThis.localDataMgr.getData(key);
+        if (!list) return false;
+        if (list.indexOf(data) >= 0) return true;
+        return false;
+    }
 
     // public getDataJudge(key){
     //     let val=this.getData(key);

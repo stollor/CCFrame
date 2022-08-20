@@ -5,6 +5,10 @@ export class ConfigMgr {
 
   public tables: Map<string, ConfTable> = null;
 
+  constructor() {
+    this.tables = new Map<string, ConfTable>;
+  }
+
   public loadConfigDir(path: string, cb?: Function) {
     resources.loadDir(path, TextAsset, (err, assets) => {
       if (err) {
