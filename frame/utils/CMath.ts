@@ -1,3 +1,5 @@
+import { stat } from "fs";
+
 export class CMath{
 
     /**
@@ -10,4 +12,10 @@ export class CMath{
     public static limit(num:number,min:number,max:number){
       return Math.min(Math.max(num,min),max);
     }
+
+	public static swap(list:any[],index1:number,index2:number){
+		let temp=list[index1];
+		list[index1] = list[index2];
+		list[index2] = temp;
+	}
 }

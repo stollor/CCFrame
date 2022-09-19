@@ -84,8 +84,10 @@ export class GameManager {
         globalThis.configMgr = GameManager.getInstance().configMgr;
 
 
-        globalThis.resMgr.proLoadPrefab(GameProLoadPageList, () => { }, () => {
-            globalThis.poolMgr.proLoadList(GameProLoadPageList, [1]);
+        globalThis.resMgr.proLoadPrefab(GameProLoadPageList, () => { }, (len) => {
+            let temp=[];
+            for(let i=0;i<len;i++){temp.push(1)}
+            globalThis.poolMgr.proLoadList(GameProLoadPageList, temp);
             globalThis.eventMgr.emit(EventType.Game_Start, null);
         })
     }

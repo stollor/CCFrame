@@ -23,7 +23,7 @@ export class ResMgr{
                 count++;
                 loadBack&&loadBack(i,len);
                 if(count>=len){
-                    callBack&&callBack();
+                    callBack&&callBack(len);
                 }
             })
         }
