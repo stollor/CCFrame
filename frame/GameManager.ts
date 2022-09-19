@@ -1,5 +1,5 @@
 import { Game } from "cc";
-import { EventType, PageType } from "../../mgr/EnumMgr";
+import { EventType, GameProLoadPageList, PageType } from "../../mgr/EnumMgr";
 import { AudioMgr } from "./manger/AudioMgr";
 import { ConfigMgr } from "./manger/ConfigMgr";
 import { EventMgr } from "./manger/EventMgr";
@@ -84,8 +84,8 @@ export class GameManager {
         globalThis.configMgr = GameManager.getInstance().configMgr;
 
 
-        globalThis.resMgr.proLoadPrefab([PageType.CPageLog], () => { }, () => {
-            globalThis.poolMgr.proLoadList([PageType.CPageLog], [1]);
+        globalThis.resMgr.proLoadPrefab(GameProLoadPageList, () => { }, () => {
+            globalThis.poolMgr.proLoadList(GameProLoadPageList, [1]);
             globalThis.eventMgr.emit(EventType.Game_Start, null);
         })
     }
