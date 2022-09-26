@@ -1,5 +1,5 @@
 import { find, Layers, Node, tween, Widget } from "cc";
-import { PageType } from "../../../mgr/EnumMgr";
+import { EventType, PageType } from "../../../mgr/EnumMgr";
 import { ColorType, PageAniType, PageLeve } from "../CEnum";
 import { CLog } from "../utils/CLog";
 import { CTween } from "../utils/CTween";
@@ -59,8 +59,6 @@ export class WindowMgr {
 
             CLog.log(`windowMgr===>${leve}页面${type}打开完毕`, ColorType.绿, this.log);
         });
-
-
     }
 
     close(page: Node, ani: PageAniType = PageAniType.fadeOut) {

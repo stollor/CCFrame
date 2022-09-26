@@ -1,8 +1,11 @@
 
 import { Component, Sprite, SpriteFrame, tween, UIOpacity, Vec3 } from 'cc';
 import { Button, Label, RichText } from 'cc';
+import { isValid } from 'cc';
+import { Asset } from 'cc';
 import { _decorator, Node } from 'cc';
 import { EventType } from '../../../mgr/EnumMgr';
+import { AutoReleaseAssets } from '../manger/AutoReleaseAssets';
 import { CTool } from '../utils/CTool';
 import { CTween } from '../utils/CTween';
 const { ccclass, property } = _decorator;
@@ -20,7 +23,8 @@ declare module 'cc' {
         //oparity:number;
         set oparity(val: number);
         get oparity(): number;
-
+        addAutoReleaseAsset: (_asset: Asset) => void;
+        addAutoReleaseAssets: (_assets: Asset[]) => void;
 
         /**增加的方法 */
         setStr: (str: string | number) => void;
@@ -34,6 +38,8 @@ declare module 'cc' {
         offClick: (cb: Function) => void;
         clearClickEvents: () => void;
         onEvent: (type: EventType, event: Function) => void;
+        onEventList: (list:any[]) => void;
+        offEventList: (list:any[]) => void;
         onEventMap: (Map: Map<EventType, Array<Function>>) => void;
     }
 
@@ -49,6 +55,24 @@ Node.prototype.destroy = function () {
     return NodeDestory.call(this);
 }
 
+
+Node.prototype.addAutoReleaseAsset = function (_asset: Asset) {
+    let oneTempAuto = this.getComponent(AutoReleaseAssets);
+    if (!isValid(oneTempAuto)) {
+        oneTempAuto = this.addComponent(AutoReleaseAssets);
+    };  
+    oneTempAuto.addAutoReleaseAsset(_asset);
+};
+
+Node.prototype.addAutoReleaseAssets = function (_assets: Asset[]) {
+    let moreTempAuto = this.getComponent(AutoReleaseAssets);
+    if (!isValid(moreTempAuto)) {
+        moreTempAuto = this.addComponent(AutoReleaseAssets);
+    };
+    for (const _assetSelf of _assets) {
+        moreTempAuto.addAutoReleaseAsset(_assetSelf);
+    };
+};
 
 
 /**
@@ -100,6 +124,7 @@ Node.prototype.setImg = function (frame: SpriteFrame) {
     comp.spriteFrame = frame;
     this.addAutoReleaseAsset(frame);
 }
+   
 
 Node.prototype.setImgRes = function (path: string) {
     globalThis.resMgr.loadImage(path, (frame) => {
@@ -110,7 +135,7 @@ Node.prototype.setImgRes = function (path: string) {
 Node.prototype.onClick = function (cb: Function, inter: number = -1, opt: any = {}) {
     let btn: Button = this.getComponent(Button);
     if (!btn) btn = this.addComponent(Button);
-    btn.transition = opt?.transition ? opt?.transition : 3;
+    btn.transition = opt?.transition!=null ? opt?.transition : 3;
     this.on(Button.EventType.CLICK, () => {
         if (inter > 0) {
             btn.interactable = false;
@@ -146,6 +171,19 @@ Node.prototype.onEventMap = function (map: Map<EventType, Array<Function>>) {
         }
     }
 }
+
+Node.prototype.onEventList=function(list:any[]){
+    for(let i=0;i<list.length;i++){
+        globalThis?.eventMgr?.on(list[i][0], list[i][1], list[i]?.[2]?list[i][2]:this)
+    }
+}
+
+Node.prototype.offEventList=function(list:any[]){
+    for(let i=0;i<list.length;i++){
+        globalThis?.eventMgr?.off(list[i][0], list[i][1], list[i]?.[2]?list[i][2]:this)
+    }
+}
+
 
 // Node.prototype.transPosto = function (node:Node,off:Vec3){
 //     var nodeWordPos = this.parent.convertToWorldSpaceAR(this.position);

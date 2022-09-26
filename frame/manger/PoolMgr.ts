@@ -157,7 +157,7 @@ export class PoolMgr {
         for (let i = children.length - 1; i >= 0; i--) {
             const node = children[i];
             if (node) {
-                globalThis.gameManager.poolNodeMgr.put(node);
+                this.put(node);
             }
         }
     }
