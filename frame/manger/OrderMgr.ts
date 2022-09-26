@@ -3,7 +3,7 @@ import { Collider2D_base } from "cc";
 export class OrderMgr {
 
 
-    public static parse(str:string,opts?:Map<any,any>){
+    public parse(str:string,opts?:Map<any,any>){
         if(!str) return;
         let result=[];
         let orderList= str.trim().split("|");
@@ -16,9 +16,10 @@ export class OrderMgr {
             }
             result.push(tempList);
         }
+        return result;
     }
 
-    public static trans(order:string,opts?:Map<any,any>){
+    public trans(order:string,opts?:Map<any,any>){
         let codes=order.split(":");
         let valList=[];
         for(let i=1;i<codes.length;i++){
@@ -36,8 +37,29 @@ export class OrderMgr {
     }
 
 
+    public a(){
 
-    public static  run(order:any){
+    }
+
+    public runOrdList(List: Array<any>, ListParent?: Array<any>,rootList?: Array<any>){
+        if ((!List && !ListParent) || (List?.length < 1 && ListParent?.length < 1)) return;
+        if (List.checkChildArray()) {
+            this.runOrdList(List.shift(), List,ListParent);
+        } else {
+            for (let i = 0; i < List.length; i++) {
+                if(!!List[i])
+                    this.runOrd(List[i], List[i].next ? () => { 
+                        if(ListParent &&ListParent.length>0)
+                            this.runOrdList(ListParent);
+                        else if(rootList &&rootList.length>0)
+                        this.runOrdList(rootList);
+                     } : null);
+            }
+        }
+    }
+
+
+    public runOrd(order:any,cb?:Function){
         switch(order.type){
             case "openPanel":globalThis.windowMgr.open.call(order.val);break;
         }

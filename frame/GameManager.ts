@@ -4,6 +4,7 @@ import { AudioMgr } from "./manger/AudioMgr";
 import { ConfigMgr } from "./manger/ConfigMgr";
 import { EventMgr } from "./manger/EventMgr";
 import { LocalDataMgr } from "./manger/LocalDataMgr";
+import { OrderMgr } from "./manger/OrderMgr";
 import { PoolMgr } from "./manger/PoolMgr";
 import { ResMgr } from "./manger/ResMgr";
 import { WindowMgr } from "./manger/WindowMgr";
@@ -25,6 +26,8 @@ export class GameManager {
     private _audioMgr: AudioMgr;
     /**事件管理 */
     private _eventMgr: EventMgr;
+    /**命令管理 */
+    private _orderMgr: OrderMgr;
     /**页面管理 */
     private _windowMgr: WindowMgr;
     /**本地数据管理 */
@@ -53,6 +56,11 @@ export class GameManager {
         return this._eventMgr;
     }
 
+    get orderMgr(){
+        if (!this._orderMgr) this._orderMgr = new OrderMgr();
+        return this._orderMgr;
+    }
+
     get windowMgr() {
         if (!this._windowMgr) this._windowMgr = new WindowMgr();
         return this._windowMgr;
@@ -77,6 +85,7 @@ export class GameManager {
     public static init() {
         globalThis.resMgr = GameManager.getInstance().resMgr;
         globalThis.eventMgr = GameManager.getInstance().eventMgr;
+        globalThis.orderMgr= GameManager.getInstance().orderMgr;
         globalThis.poolMgr = GameManager.getInstance().poolMgr;
         globalThis.audioMgr = GameManager.getInstance().audioMgr;
         globalThis.windowMgr = GameManager.getInstance().windowMgr;
