@@ -1,8 +1,8 @@
-import {  _decorator,Asset,isValid } from 'cc';
+import {  _decorator,Asset,isValid, Component } from 'cc';
 const { ccclass, property ,menu} = _decorator;
 
 @ccclass('AutoReleaseAssets')
-export class AutoReleaseAssets {
+export class AutoReleaseAssets extends Component{
 
     private dynamicsAssets: Asset[] = [];
 
