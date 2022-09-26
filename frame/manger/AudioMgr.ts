@@ -1,5 +1,4 @@
 import { AudioClip, AudioSource, Node, Scheduler } from "cc";
-import { AudioType } from "../../../mgr/EnumMgr";
 import { CMath } from "../utils/CMath";
 import { CTween } from "../utils/CTween";
 
@@ -12,7 +11,7 @@ export class AudioNode {
     public loop: boolean = false;
     public fadeIn: boolean = false;
     public fadeOut: boolean = false;
-    public audio: AudioType;
+    public audio: string;
     public cb: Function;
     public cbOnec: Function;
     public debug: boolean = false;
@@ -124,7 +123,7 @@ export class AudioNode {
     }
 
     /**切换至 */
-    public switchTo(type: AudioType, cb: Function = () => { }) {
+    public switchTo(type: string, cb: Function = () => { }) {
         this.runFadeOut(0.1, () => {
             this.component.stop();
             this.audio = type;
@@ -149,10 +148,11 @@ export class AudioMgr {
         this.BG = new AudioNode();
         this.Music = new AudioNode();
         this.Effect = new AudioNode();
+        this.EffectOne = new AudioNode();
         this.Story = new AudioNode();
     }
 
-    public switchBG(type: AudioType, debug = false) {
+    public switchBG(type: string, debug = false) {
         this.BG.fadeIn = true;
         this.BG.fadeOut = true;
         this.BG.loop = true;
@@ -160,7 +160,7 @@ export class AudioMgr {
         this.BG.switchTo(type);
     }
 
-    public playMusic(type: AudioType, volume: number, loop: boolean = false, cb: Function = () => { }, debug: boolean = false) {
+    public playMusic(type: string, volume: number, loop: boolean = false, cb: Function = () => { }, debug: boolean = false) {
         this.Music.fadeIn = true;
         this.Music.audio = type;
         this.Music.loop = loop;
@@ -170,7 +170,7 @@ export class AudioMgr {
         this.Music.play();
     }
 
-    public playEffect(type: AudioType, volume: number, loop: boolean = false, cb?: Function, debug: boolean = false) {
+    public playEffect(type: string, volume: number, loop: boolean = false, cb?: Function, debug: boolean = false) {
         this.Effect.fadeIn = true;
         this.Effect.audio = type;
         this.Effect.loop = loop;
@@ -180,8 +180,9 @@ export class AudioMgr {
         this.Effect.play();
     }
 
-    public playOneShot(type: AudioType, volume: number, cb: Function = () => { }, debug: boolean = false) {
-        this.EffectOne.fadeIn = true;
+    public playOneShot(type: string, volume: number, cb: Function = () => { }, debug: boolean = false) {
+        this.EffectOne.fadeIn = false;
+        this.EffectOne.fadeOut = false;
         this.EffectOne.audio = type;
         this.EffectOne.cb = cb;
         this.EffectOne.loop = false;

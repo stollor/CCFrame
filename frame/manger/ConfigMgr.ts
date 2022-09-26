@@ -29,7 +29,7 @@ export class ConfigMgr {
     });
   }
 
-  public createTable(name: string, source: string) {
+  private createTable(name: string, source: string) {
     let cfg = new ConfTable(name);
     cfg.init(source);
     this.tables.set(name, cfg);
@@ -103,7 +103,10 @@ export class ConfTable {
     let i = 0;
     let tmps: string[] = null;
     if (cls == "bool") {
-      return parseInt(value) != 0 ? true : false;
+      if(value=="true" || value=="TRUE"||  parseInt(value) ==1){
+        return true;
+      }
+      else return false
     }
     if (cls == "string") {
       return value;
