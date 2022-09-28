@@ -1,5 +1,5 @@
 import { Game } from "cc";
-import { EventType, GameProLoadPageList, PageType } from "../../mgr/EnumMgr";
+import { defaultConfig, EventType, PageType } from "../../mgr/EnumMgr";
 import { AudioMgr } from "./manger/AudioMgr";
 import { ConfigMgr } from "./manger/ConfigMgr";
 import { EventMgr } from "./manger/EventMgr";
@@ -92,12 +92,22 @@ export class GameManager {
         globalThis.localDataMgr = GameManager.getInstance().localDataMgr;
         globalThis.configMgr = GameManager.getInstance().configMgr;
 
+        let count=0;
+        var cb=()=>{
+            count++;
+            if(count>=2){
+                globalThis.eventMgr.emit(EventType.Game_Start, null);
+            }
+        }
 
-        globalThis.resMgr.proLoadPrefab(GameProLoadPageList, () => { }, (len) => {
+        globalThis.configMgr.loadConfigDir(defaultConfig.configDir,cb)
+
+        globalThis.resMgr.proLoadPrefab(defaultConfig.GameProLoadPageList, () => { }, (len) => {
             let temp=[];
             for(let i=0;i<len;i++){temp.push(1)}
-            globalThis.poolMgr.proLoadList(GameProLoadPageList, temp);
-            globalThis.eventMgr.emit(EventType.Game_Start, null);
+            globalThis.poolMgr.proLoadList(defaultConfig.GameProLoadPageList, temp);
+            
+            cb&&cb();
         })
     }
 }

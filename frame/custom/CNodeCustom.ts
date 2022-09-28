@@ -30,7 +30,8 @@ declare module 'cc' {
         setStr: (str: string | number) => void;
         setStrStep: (str: string | number, speed: number, cb?: Function) => void;
         setStrStepByTime: (str: string | number, speed: number, cb?: Function) => void;
-        setRichStrStepByTime: (str: string, speed: number, cb?: Function) => void;
+        setRichStrStepByTime: (str: string, time: number, cb?: Function) => void;
+        setRichStrStepBySpeed:(str: string, speed: number, cb?: Function) => void;
         setImg: (frame: SpriteFrame) => void;
         setImgRes: (path: string) => void;
         onClick: (cb: Function, inter?: number, opt?: any) => void;
@@ -102,6 +103,19 @@ Node.prototype.setRichStrStepByTime = function (str: string, time: number, cb: F
     CTween.FromTo(time, 0, len, (progress) => {
         sp.string = richList[~~(len - progress)];
     }, null, () => { cb && cb() })
+}
+
+Node.prototype.setRichStrStepBySpeed = function (str: string, speed: number, cb: Function = null) {
+    let richList = CTool.GetRichTextArrary(str);
+    let len = richList.length - 1;
+    let sp = this.getComponent(RichText);
+    CTween.FromTo(len/speed, 0, len, (progress) => {
+        sp.string = richList[~~(len - progress)];
+    }, null, () => { cb && cb() })
+
+    // this.schedule(()=>{
+    //     sp.string = richList[~~(len - progress)];
+    // },0.1,len)
 }
 
 Node.prototype.setImg = function (frame: SpriteFrame) {
