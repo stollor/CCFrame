@@ -16,14 +16,6 @@ export class CComponentCustom extends Component {
 }
 
 
-// declare module 'cc' {
-//     interface Component {
-        
-//     }
-
-
-// }
-
 
 // Component.prototype.addAutoReleaseAsset = function (_asset: Asset) {
 //     let oneTempAuto = this.node.getComponent(AutoReleaseAssets);

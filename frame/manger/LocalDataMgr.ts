@@ -41,6 +41,17 @@ export class LocalDataMgr {
         this.setData(key, local);
     }
 
+    public removeListItem(key: string, data: any, repeat: boolean = false) {
+        let local = this.getData(key);
+        if (!local) local = [];
+        if (!repeat) {
+            local = local.filter(item => item != data)
+        } else {
+            local.splice(local.indexOf(data), 1)
+        }
+        this.setData(key, local);
+    }
+
     public checkListItem(key, data) {
         let list = globalThis.localDataMgr.getData(key);
         if (!list) return false;

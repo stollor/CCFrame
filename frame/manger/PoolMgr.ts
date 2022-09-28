@@ -16,7 +16,7 @@ import { CLog } from "../utils/CLog";
  */
 export class PoolMgr {
     private _pool: Map<string, Node[]>;
-    public log: boolean = false;
+    public log: boolean = true;
 
 
 
@@ -122,6 +122,7 @@ export class PoolMgr {
      * @returns 
      */
     public put(node: Node) {
+        if (!node) return;
         let path = node["path"];
         if (path) {
             node.active = false;

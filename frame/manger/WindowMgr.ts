@@ -37,7 +37,7 @@ export class WindowMgr {
         }
     }
 
-    open(type: PageType, leve: PageLeve, data = null, ani: PageAniType = PageAniType.fadeIn) {
+    open(type: PageType, leve: PageLeve, data = null, ani: PageAniType = PageAniType.fadeIn, cb?: Function) {
         CLog.log(`windowMgr===>请求打开${leve}页面${type}`, ColorType.橙, this.log);
         globalThis.poolMgr.get(type, (page) => {
             let parent: Node = find("Canvas/pages/" + leve);
@@ -54,9 +54,9 @@ export class WindowMgr {
 
             for (let i = 0; i < page.components.length; i++) {
                 //@ts-ignore
-                page.components[i].init?.(data);
+                page.components[i]?.init?.(data);
             }
-
+            cb && cb(page);
             CLog.log(`windowMgr===>${leve}页面${type}打开完毕`, ColorType.绿, this.log);
         });
     }
