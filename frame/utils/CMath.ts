@@ -1,5 +1,3 @@
-import { stat } from "fs";
-
 export class CMath {
 
   /**
@@ -20,15 +18,26 @@ export class CMath {
   }
 
   /**
-   * @file: 数组中删除特定某个元素
-   * @author: zouyuefen
-   * @date: 2021/12/2 15:57
-   **/
+   * 删除数组特定元素  
+   */
   public static arrRemove<T>(arr: Array<T>, obj: T) {
     if (!arr) return;
     let index = arr.indexOf(obj);
     if (index > -1) {
       arr.splice(index, 1);
+    }
+  }
+
+
+  /**
+   * 洗牌算法
+   * @param arr 
+   */
+  public static shuffleList(arr: any[]) {
+    let len = arr.length;
+    for (let i = 0; i < len; i++) {
+      let k = Math.floor(Math.random() * (len - i) + i);
+      [arr[i], arr[k]] = [arr[k], arr[i]];
     }
   }
 }
