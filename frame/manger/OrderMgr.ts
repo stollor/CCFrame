@@ -1,5 +1,3 @@
-import { Collider2D_base } from "cc";
-
 export class OrderMgr {
 
 
