@@ -1,7 +1,5 @@
 
-import { Component, Sprite, SpriteFrame, tween, UIOpacity, Vec3 } from 'cc';
-import { _decorator, Node } from 'cc';
-
+import { Component,_decorator} from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('CComponent')

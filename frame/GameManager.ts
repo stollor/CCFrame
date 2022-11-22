@@ -56,7 +56,7 @@ export class GameManager {
         return this._eventMgr;
     }
 
-    get orderMgr(){
+    get orderMgr() {
         if (!this._orderMgr) this._orderMgr = new OrderMgr();
         return this._orderMgr;
     }
@@ -85,29 +85,29 @@ export class GameManager {
     public static init() {
         globalThis.resMgr = GameManager.getInstance().resMgr;
         globalThis.eventMgr = GameManager.getInstance().eventMgr;
-        globalThis.orderMgr= GameManager.getInstance().orderMgr;
+        globalThis.orderMgr = GameManager.getInstance().orderMgr;
         globalThis.poolMgr = GameManager.getInstance().poolMgr;
         globalThis.audioMgr = GameManager.getInstance().audioMgr;
         globalThis.windowMgr = GameManager.getInstance().windowMgr;
         globalThis.localDataMgr = GameManager.getInstance().localDataMgr;
         globalThis.configMgr = GameManager.getInstance().configMgr;
 
-        let count=0;
-        var cb=()=>{
+        let count = 0;
+        var cb = () => {
             count++;
-            if(count>=2){
+            if (count >= 2) {
                 globalThis.eventMgr.emit(EventType.Game_Start, null);
             }
         }
 
-        globalThis.configMgr.loadConfigDir(defaultConfig.configDir,cb)
+        globalThis.configMgr.loadConfigDir(defaultConfig.configDir, cb)
 
         globalThis.resMgr.proLoadPrefab(defaultConfig.GameProLoadPageList, () => { }, (len) => {
-            let temp=[];
-            for(let i=0;i<len;i++){temp.push(1)}
+            let temp = [];
+            for (let i = 0; i < len; i++) { temp.push(1) }
             globalThis.poolMgr.proLoadList(defaultConfig.GameProLoadPageList, temp);
-            
-            cb&&cb();
+
+            cb && cb();
         })
     }
 }

@@ -1,13 +1,5 @@
 
-import { Component, Sprite, SpriteFrame, tween, UIOpacity } from 'cc';
-import { Button, Label, RichText } from 'cc';
-import { Asset } from 'cc';
-import { isValid } from 'cc';
-import { _decorator, Node } from 'cc';
-import { EventType } from '../../../mgr/EnumMgr';
-import { AutoReleaseAssets } from '../manger/AutoReleaseAssets';
-import { CTool } from '../utils/CTool';
-import { CTween } from '../utils/CTween';
+import { Component,_decorator  } from 'cc';
 const { ccclass, property } = _decorator;
 
 @ccclass('CComponentCustom')

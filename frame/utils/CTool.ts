@@ -185,4 +185,13 @@ export class CTool {
         return this.charString(filler,leng-str.length)+str;
     }
 
+    /**深拷贝 ps:不能拷贝方法,只能拷贝数据
+   * @param obj  拷贝对象
+   */
+	public static deepCopy(obj: any): any {
+		var a = JSON.stringify(obj);
+		var newobj = JSON.parse(a);
+		return newobj;
+	}
+
 }
