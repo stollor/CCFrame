@@ -82,7 +82,7 @@ export class GameManager {
         return this._getInstance;
     }
 
-    public static init() {
+    constructor() {
         globalThis.resMgr = GameManager.getInstance().resMgr;
         globalThis.eventMgr = GameManager.getInstance().eventMgr;
         globalThis.orderMgr = GameManager.getInstance().orderMgr;
